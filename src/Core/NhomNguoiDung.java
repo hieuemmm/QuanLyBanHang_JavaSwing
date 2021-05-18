@@ -11,23 +11,28 @@ package Core;
  */
 public class NhomNguoiDung {
 
-    int MaNguoiDung;
+    int MaNhomNguoiDung;
     String TenNhomNguoiDung;
 
     public NhomNguoiDung() {
     }
 
-    public NhomNguoiDung(int MaNguoiDung, String TenNhomNguoiDung) {
-        this.MaNguoiDung = MaNguoiDung;
+    public NhomNguoiDung(NhomNguoiDung NND) {
+        this.MaNhomNguoiDung = NND.getMaNhomNguoiDung();
+        this.TenNhomNguoiDung = NND.getTenNhomNguoiDung();
+    }
+
+    public NhomNguoiDung(int MaNhomNguoiDung, String TenNhomNguoiDung) {
+        this.MaNhomNguoiDung = MaNhomNguoiDung;
         this.TenNhomNguoiDung = TenNhomNguoiDung;
     }
 
-    public int getMaNguoiDung() {
-        return MaNguoiDung;
+    public int getMaNhomNguoiDung() {
+        return MaNhomNguoiDung;
     }
 
-    public void setMaNguoiDung(int MaNguoiDung) {
-        this.MaNguoiDung = MaNguoiDung;
+    public void setMaNhomNguoiDung(int MaNhomNguoiDung) {
+        this.MaNhomNguoiDung = MaNhomNguoiDung;
     }
 
     public String getTenNhomNguoiDung() {

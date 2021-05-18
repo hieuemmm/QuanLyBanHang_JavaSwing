@@ -54,7 +54,7 @@ import sun.applet.Main;
  *
  * @author Administrator
  */
-public class MasterLayout extends javax.swing.JFrame {
+public final class MasterLayout extends javax.swing.JFrame {
 
     public static MasterLayout it;
 
@@ -79,7 +79,6 @@ public class MasterLayout extends javax.swing.JFrame {
         Dimension windowSize = getSize();
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         Point centerPoint = ge.getCenterPoint();
-
         int dx = centerPoint.x - windowSize.width / 2;
         int dy = centerPoint.y - windowSize.height / 2;
         setLocation(dx, dy);
@@ -117,8 +116,6 @@ public class MasterLayout extends javax.swing.JFrame {
         javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("QUẢN LÝ BÁN HÀNG");
         javax.swing.tree.DefaultMutableTreeNode treeNode2 = new javax.swing.tree.DefaultMutableTreeNode("Dashbroad");
         treeNode1.add(treeNode2);
-        treeNode2 = new javax.swing.tree.DefaultMutableTreeNode("Quản Lý Nhóm Người Dùng");
-        treeNode1.add(treeNode2);
         treeNode2 = new javax.swing.tree.DefaultMutableTreeNode("Quản Lý Người Dùng");
         treeNode1.add(treeNode2);
         treeNode2 = new javax.swing.tree.DefaultMutableTreeNode("Quản Lý Danh Mục");
@@ -143,7 +140,7 @@ public class MasterLayout extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -157,7 +154,7 @@ public class MasterLayout extends javax.swing.JFrame {
         panelControl.setLayout(panelControlLayout);
         panelControlLayout.setHorizontalGroup(
             panelControlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 978, Short.MAX_VALUE)
+            .addGap(0, 981, Short.MAX_VALUE)
         );
         panelControlLayout.setVerticalGroup(
             panelControlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -209,17 +206,14 @@ public class MasterLayout extends javax.swing.JFrame {
     private void jTreeMenuValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_jTreeMenuValueChanged
         DefaultMutableTreeNode selectNode = (DefaultMutableTreeNode) jTreeMenu.getLastSelectedPathComponent();
         switch (selectNode.getUserObject().toString()) {
-            case "Quản Lý Nhóm Người Dùng":
-                panelControl.removeAll();
-                QuanLyNhomNguoiDung ip = new QuanLyNhomNguoiDung();
-                ip.setSize(980, 531);
-                ip.setPreferredSize(new Dimension(980, 531));
-                panelControl.add(ip);
-                panelControl.updateUI();
-                break;
             case "Quản Lý Người Dùng":
                 panelControl.removeAll();
-                QuanLyNguoiDung QLND = new QuanLyNguoiDung();
+                QuanLyNguoiDung QLND = null;
+                try {
+                    QLND = new QuanLyNguoiDung();
+                } catch (ClassNotFoundException | SQLException ex) {
+                    Logger.getLogger(MasterLayout.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 QLND.setSize(980, 531);
                 QLND.setPreferredSize(new Dimension(980, 531));
                 panelControl.add(QLND);
@@ -259,14 +253,20 @@ public class MasterLayout extends javax.swing.JFrame {
                 break;
             default:
                 panelControl.removeAll();
-                Dashbroad DB = new Dashbroad();
+                Dashbroad DB = null;
+                try {
+                    DB = new Dashbroad();
+                } catch (ClassNotFoundException | SQLException ex) {
+                    Logger.getLogger(MasterLayout.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 DB.setSize(980, 531);
                 DB.setPreferredSize(new Dimension(980, 531));
                 panelControl.add(DB);
                 panelControl.updateUI();
+
         }
     }//GEN-LAST:event_jTreeMenuValueChanged
-    public void showDashbroad() {
+    public void showDashbroad() throws ClassNotFoundException, SQLException {
         panelControl.removeAll();
         Dashbroad DB = new Dashbroad();
         DB.setSize(980, 531);
@@ -274,48 +274,6 @@ public class MasterLayout extends javax.swing.JFrame {
         panelControl.add(DB);
         panelControl.updateUI();
     }
-
-    /**
-     * @param args the command line arguments
-     */
-//    public static void main(String args[]) {
-//        /* Set the Nimbus look and feel */
-//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-//         */
-//        try {
-//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-//                if ("Nimbus".equals(info.getName())) {
-//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-//                    break;
-//                }
-//            }
-//        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(MasterLayout.class
-//                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(MasterLayout.class
-//                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(MasterLayout.class
-//                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(MasterLayout.class
-//                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        }
-//        //</editor-fold>
-//
-//        /* Create and display the form */
-//        java.awt.EventQueue.invokeLater(() -> {
-//            try {
-//                new MasterLayout().setVisible(true);
-//            } catch (ClassNotFoundException | SQLException | UnsupportedLookAndFeelException | InstantiationException | IllegalAccessException ex) {
-//                Logger.getLogger(MasterLayout.class
-//                        .getName()).log(Level.SEVERE, null, ex);
-//            }
-//        });
-//    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;

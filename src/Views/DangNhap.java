@@ -1,6 +1,6 @@
 package Views;
 
-import Controllers.DangNhapController;
+import Controllers.TaiKhoanController;
 import Core.TaiKhoan;
 import Models.TaiKhoanModel;
 import java.awt.Color;
@@ -22,7 +22,7 @@ import javax.swing.UnsupportedLookAndFeelException;
  */
 public class DangNhap extends javax.swing.JFrame {
 
-    private DangNhapController dangnhapController;
+    private TaiKhoanController dangnhapController;
     public static TaiKhoan taikhoandangnhap;
 
     public DangNhap() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
@@ -30,7 +30,7 @@ public class DangNhap extends javax.swing.JFrame {
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         initComponents();
         centerFrame();
-        dangnhapController = new DangNhapController();
+        dangnhapController = new TaiKhoanController();
         taikhoandangnhap = new TaiKhoan();
         jLabelLoiDangNhap.setVisible(false);
         jCheckBoxRemeberme.setSelected(true);

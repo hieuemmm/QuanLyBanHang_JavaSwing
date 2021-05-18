@@ -5,6 +5,10 @@
  */
 package Views;
 
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Administrator
@@ -239,7 +243,11 @@ public class ThongKeSanPham extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        MasterLayout.it.showDashbroad();        // TODO add your handling code here:
+        try {
+            MasterLayout.it.showDashbroad();        // TODO add your handling code here:
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(ThongKeSanPham.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton6ActionPerformed
 
 

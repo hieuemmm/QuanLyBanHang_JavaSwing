@@ -16,14 +16,17 @@ public class TaiKhoan extends NhomNguoiDung{
 
     public TaiKhoan() {
     }
+    public TaiKhoan(String TaiKhoan) {
+        this.TaiKhoan = TaiKhoan;
+    }
     public TaiKhoan(String TaiKhoan, String MatKhau, String Ten) {
         this.TaiKhoan = TaiKhoan;
         this.MatKhau = MatKhau;
         this.Ten = Ten;
     }
 
-    public TaiKhoan(String TaiKhoan, String MatKhau, String Ten, int MaNguoiDung, String TenNhomNguoiDung) {
-        super(MaNguoiDung, TenNhomNguoiDung);
+    public TaiKhoan(String TaiKhoan, String MatKhau, String Ten, int MaNhomNguoiDung) {
+        super.MaNhomNguoiDung = MaNhomNguoiDung;
         this.TaiKhoan = TaiKhoan;
         this.MatKhau = MatKhau;
         this.Ten = Ten;
@@ -54,13 +57,13 @@ public class TaiKhoan extends NhomNguoiDung{
     }
 
     @Override
-    public int getMaNguoiDung() {
-        return MaNguoiDung;
+    public int getMaNhomNguoiDung() {
+        return MaNhomNguoiDung;
     }
 
     @Override
-    public void setMaNguoiDung(int MaNguoiDung) {
-        this.MaNguoiDung = MaNguoiDung;
+    public void setMaNhomNguoiDung(int MaNhomNguoiDung) {
+        this.MaNhomNguoiDung = MaNhomNguoiDung;
     }
 
     @Override

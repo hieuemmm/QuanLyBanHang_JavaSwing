@@ -5,6 +5,10 @@
  */
 package Views;
 
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Administrator
@@ -239,7 +243,11 @@ public class QuanLyDanhMuc extends javax.swing.JPanel {
     }//GEN-LAST:event_jButtonXoaActionPerformed
 
     private void jButtonQuayLaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonQuayLaiActionPerformed
-        MasterLayout.it.showDashbroad();
+        try {
+            MasterLayout.it.showDashbroad();
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(QuanLyDanhMuc.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButtonQuayLaiActionPerformed
 
 

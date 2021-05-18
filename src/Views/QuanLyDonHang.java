@@ -5,6 +5,10 @@
  */
 package Views;
 
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Administrator
@@ -289,7 +293,11 @@ public class QuanLyDonHang extends javax.swing.JPanel {
     }//GEN-LAST:event_jButtonXoaActionPerformed
 
     private void jButtonQuayLaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonQuayLaiActionPerformed
-        MasterLayout.it.showDashbroad();        // TODO add your handling code here:
+        try {
+            MasterLayout.it.showDashbroad();        // TODO add your handling code here:
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(QuanLyDonHang.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButtonQuayLaiActionPerformed
 
 
