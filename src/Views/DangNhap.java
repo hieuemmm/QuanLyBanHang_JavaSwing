@@ -1,5 +1,8 @@
 package Views;
 
+import Controllers.DangNhapController;
+import Core.TaiKhoan;
+import Models.TaiKhoanModel;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -19,12 +22,16 @@ import javax.swing.UnsupportedLookAndFeelException;
  */
 public class DangNhap extends javax.swing.JFrame {
 
+    private DangNhapController dangnhapController;
+    public static TaiKhoan taikhoandangnhap;
 
     public DangNhap() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
         //this.setBackground(Color.WHITE);
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         initComponents();
         centerFrame();
+        dangnhapController = new DangNhapController();
+        taikhoandangnhap = new TaiKhoan();
         jLabelLoiDangNhap.setVisible(false);
         jCheckBoxRemeberme.setSelected(true);
         jButtonDangNhap.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -186,12 +193,26 @@ public class DangNhap extends javax.swing.JFrame {
     }//GEN-LAST:event_jCheckBoxRemebermeActionPerformed
 
     private void jButtonDangNhapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDangNhapActionPerformed
-        try {
-            new MasterLayout().setVisible(true);
-        } catch (ClassNotFoundException | SQLException | UnsupportedLookAndFeelException | InstantiationException | IllegalAccessException ex) {
-            Logger.getLogger(DangNhap.class.getName()).log(Level.SEVERE, null, ex);
+        if (!jTextFieldTaiKhoan.getText().equals("") && !String.valueOf(jPasswordFieldMatKhau.getPassword()).equals("")) {
+            taikhoandangnhap.setTaiKhoan(jTextFieldTaiKhoan.getText().trim());
+            taikhoandangnhap.setMatKhau(String.valueOf(jPasswordFieldMatKhau.getPassword()).trim());
+            try {
+                if (dangnhapController.CheckDangNhap(taikhoandangnhap)) {
+                    try {
+                        new MasterLayout().setVisible(true);
+                    } catch (ClassNotFoundException | SQLException | UnsupportedLookAndFeelException | InstantiationException | IllegalAccessException ex) {
+                        Logger.getLogger(DangNhap.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    taikhoandangnhap = dangnhapController.LayThongTinDangNhap(taikhoandangnhap);
+                    this.dispose();
+                }else{
+                    jLabelLoiDangNhap.setVisible(true);
+                }
+            } catch (ClassNotFoundException | SQLException ex) {
+                Logger.getLogger(DangNhap.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-        this.dispose();
+
     }//GEN-LAST:event_jButtonDangNhapActionPerformed
 
     public static void main(String args[]) {
