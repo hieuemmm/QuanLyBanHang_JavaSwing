@@ -9,14 +9,23 @@ package Core;
  *
  * @author Administrator
  */
-public class danhmucsanpham {
-    int  MaDanhMuc;
+public class DanhMucSanPham {
+
+    int MaDanhMuc;
     String TenDanhMuc;
 
-    public danhmucsanpham() {
+    public DanhMucSanPham() {
     }
 
-    public danhmucsanpham(int MaDanhMuc, String TenDanhMuc) {
+    public DanhMucSanPham(int MaDanhMuc) {
+        this.MaDanhMuc = MaDanhMuc;
+    }
+
+    public DanhMucSanPham(String TenDanhMuc) {
+        this.TenDanhMuc = TenDanhMuc;
+    }
+
+    public DanhMucSanPham(int MaDanhMuc, String TenDanhMuc) {
         this.MaDanhMuc = MaDanhMuc;
         this.TenDanhMuc = TenDanhMuc;
     }
@@ -36,5 +45,5 @@ public class danhmucsanpham {
     public void setTenDanhMuc(String TenDanhMuc) {
         this.TenDanhMuc = TenDanhMuc;
     }
-    
+
 }

@@ -8,6 +8,7 @@ package Models;
 import static Core.ConnectMySQL.getJDBCConnection;
 import com.mysql.jdbc.Connection;
 import Core.SanPham;
+import Core.DanhMucSanPham;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,30 +20,41 @@ import java.util.List;
  * @author Administrator
  */
 public class SanPhamModel {
-//    public List<SanPham> getAllSanPham() throws ClassNotFoundException, SQLException {
-//        List<SanPham> SanPhams = new ArrayList<SanPham>();
-//        Connection connection = getJDBCConnection();
-//        String Sql = "SELECT SUM(SoLuong)AS TongSoLuong FROM SanPham;";
-//        try {
-//            PreparedStatement preparedStatement = connection.prepareStatement(Sql);
-//            ResultSet rs = preparedStatement.executeQuery();
-//            while (rs.next()) {
-//                SanPham user = new SanPham();
-//                user.setId(rs.getInt("id"));
-//                user.setName(rs.getString("name"));
-//                user.setPhone(rs.getString("phone"));
-//                user.setSanPhamname(rs.getString("username"));
-//                user.setPassword(rs.getString("password"));
-//                user.setRole(rs.getString("role"));
-//                user.setFavorites(rs.getString("favorites"));
-//                user.setAbout(rs.getString("about"));
-//                SanPhams.add(user);
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return SanPhams;
-//    }
+
+    public List<DanhMucSanPham> getAllDanhMucSanPham() throws ClassNotFoundException, SQLException {
+        List<DanhMucSanPham> DanhMucSanPhams = new ArrayList<DanhMucSanPham>();
+        Connection connection = getJDBCConnection();
+        String Sql = "SELECT * FROM DanhMucSanPham;";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(Sql);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                DanhMucSanPham DMSP = new DanhMucSanPham();
+                DMSP.setMaDanhMuc(rs.getInt("MaDanhMuc"));
+                DMSP.setTenDanhMuc(rs.getString("TenDanhMuc"));
+                DanhMucSanPhams.add(DMSP);
+            }
+        } catch (SQLException e) {
+        }
+        return DanhMucSanPhams;
+    }
+
+    public DanhMucSanPham LayThongTinDanhMuc(DanhMucSanPham DanhMucSP) throws ClassNotFoundException, SQLException {
+        Connection connection = getJDBCConnection();
+        String Sql = "SELECT * FROM DanhMucSanPham WHERE MaDanhMuc = ?;";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(Sql);
+            preparedStatement.setInt(1, DanhMucSP.getMaDanhMuc());
+            ResultSet rs = preparedStatement.executeQuery();
+            rs.first();
+            DanhMucSanPham DMSP = new DanhMucSanPham();
+            DMSP.setMaDanhMuc(rs.getInt("MaDanhMuc"));
+            DMSP.setTenDanhMuc(rs.getString("TenDanhMuc"));
+            return DMSP;
+        } catch (SQLException e) {
+        }
+        return null;
+    }
 
     public int DemTongSoSanPham() throws ClassNotFoundException, SQLException {
         Connection connection = getJDBCConnection();
@@ -55,5 +67,29 @@ public class SanPhamModel {
         } catch (SQLException e) {
         }
         return 0;
+    }
+
+    public void addDanhMucSanPham(DanhMucSanPham DMSP) throws ClassNotFoundException, SQLException {
+        Connection connection = getJDBCConnection();
+        String Sql = "INSERT INTO DanhMucSanPham(TenDanhMuc) VALUES (?);";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(Sql);
+            //ResultSet rs = preparedStatement.executeQuery();
+            preparedStatement.setString(1, DMSP.getTenDanhMuc());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+        }
+    }
+
+    public void updateDanhMuc(DanhMucSanPham DMSP) throws ClassNotFoundException, SQLException {
+        Connection connection = getJDBCConnection();
+        String Sql = "UPDATE DanhMucSanPham SET TenDanhMuc = ? WHERE MaDanhMuc = ?;";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(Sql);
+            preparedStatement.setString(1, DMSP.getTenDanhMuc());
+            preparedStatement.setInt(2, DMSP.getMaDanhMuc());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+        }
     }
 }

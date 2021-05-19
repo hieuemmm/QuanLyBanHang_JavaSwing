@@ -211,22 +211,29 @@ public final class MasterLayout extends javax.swing.JFrame {
                 QuanLyNguoiDung QLND = null;
                 try {
                     QLND = new QuanLyNguoiDung();
+                    QLND.setSize(980, 531);
+                    QLND.setPreferredSize(new Dimension(980, 531));
+                    panelControl.add(QLND);
+                    panelControl.updateUI();
                 } catch (ClassNotFoundException | SQLException ex) {
                     Logger.getLogger(MasterLayout.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                QLND.setSize(980, 531);
-                QLND.setPreferredSize(new Dimension(980, 531));
-                panelControl.add(QLND);
-                panelControl.updateUI();
                 break;
             case "Quản Lý Danh Mục":
                 panelControl.removeAll();
-                QuanLyDanhMuc QLDM = new QuanLyDanhMuc();
-                QLDM.setSize(980, 531);
-                QLDM.setPreferredSize(new Dimension(980, 531));
-                panelControl.add(QLDM);
-                panelControl.updateUI();
+                QuanLyDanhMuc QLDM;
+                try {
+                    QLDM = new QuanLyDanhMuc();
+                    QLDM.setSize(980, 531);
+                    QLDM.setPreferredSize(new Dimension(980, 531));
+                    panelControl.add(QLDM);
+                    panelControl.updateUI();
+                } catch (ClassNotFoundException | SQLException ex) {
+                    Logger.getLogger(MasterLayout.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
                 break;
+
             case "Quản Lý Sản Phẩm":
                 panelControl.removeAll();
                 QuanLySanPham QLSP = new QuanLySanPham();

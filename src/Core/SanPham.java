@@ -9,7 +9,7 @@ package Core;
  *
  * @author Administrator
  */
-public class SanPham extends danhmucsanpham{
+public class SanPham extends DanhMucSanPham{
     int MaSanPham;
     String TenSanPham;
     int SoLuong;

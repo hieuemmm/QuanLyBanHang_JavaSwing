@@ -5,9 +5,25 @@
  */
 package Views;
 
+import Controllers.SanPhamController;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import Controllers.TaiKhoanController;
+import Core.MyObjectListCellRenderer;
+import Core.DanhMucSanPham;
+import Core.TaiKhoan;
+import java.awt.Point;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -15,11 +31,71 @@ import java.util.logging.Logger;
  */
 public class QuanLyDanhMuc extends javax.swing.JPanel {
 
+    private static SanPhamController SPController;
+    private final DefaultTableModel defaultTableModel;
+    private List<DanhMucSanPham> DanhMucSanPhams;
+
     /**
      * Creates new form QuanLyNhomNguoiDung
      */
-    public QuanLyDanhMuc() {
+    public QuanLyDanhMuc() throws ClassNotFoundException, SQLException {
         initComponents();
+        SPController = new SanPhamController();
+        DanhMucSanPhams = new ArrayList<DanhMucSanPham>();
+        jTextFieldMaDanhMuc.setEditable(false);
+        jLabelTrangThaiChucNang.setVisible(false);
+        jLabelTrangThaiChucNang.setText("New");
+
+        defaultTableModel = new DefaultTableModel() {
+            //không cho phép sửa dữ liệu trên table
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        //thông qua dữ liệu trong defaultTableModel để set data cho table
+        jTableDanhMuc.setModel(defaultTableModel);
+        //set giá trị cột
+        defaultTableModel.addColumn("Mã Danh Mục");
+        defaultTableModel.addColumn("Tên Danh Mục");
+        jTableDanhMuc.setRowHeight(30);
+        setTableData(SPController.getAllDanhMucSanPham());
+
+        jTableDanhMuc.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent mouseEvent) {
+                JTable table = (JTable) mouseEvent.getSource();
+                Point point = mouseEvent.getPoint();
+                int row = table.rowAtPoint(point);
+                if (mouseEvent.getClickCount() == 2 && table.getSelectedRow() != -1) {
+                    try {
+                        DanhMucSanPham DanhMucSelect = LayDuLieuChon();
+                        jTextFieldMaDanhMuc.setText(String.valueOf(DanhMucSelect.getMaDanhMuc()));
+                        jTextFieldtenDanhMuc.setText(DanhMucSelect.getTenDanhMuc());
+                        jLabelTrangThaiChucNang.setText("Edit");
+                    } catch (ClassNotFoundException | SQLException ex) {
+                        Logger.getLogger(QuanLyNguoiDung.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        });
+    }
+
+    public static DanhMucSanPham LayDuLieuChon() throws ClassNotFoundException, SQLException {
+        int row = jTableDanhMuc.getSelectedRow();
+        int MaDM = Integer.parseInt(String.valueOf(jTableDanhMuc.getValueAt(row, 0)));
+        return SPController.LayThongTinDanhMuc(new DanhMucSanPham(MaDM));
+    }
+
+    private void setTableData(List<DanhMucSanPham> DanhMucSanPhams) throws ClassNotFoundException, SQLException {
+        defaultTableModel.setRowCount(0);
+        DanhMucSanPhams.forEach(x -> {
+            //set giá trị hàng
+            defaultTableModel.addRow(new Object[]{
+                x.getMaDanhMuc(),
+                x.getTenDanhMuc()
+            });
+        });
     }
 
     /**
@@ -43,10 +119,9 @@ public class QuanLyDanhMuc extends javax.swing.JPanel {
         jTextFieldtenDanhMuc = new javax.swing.JTextField();
         jButtonThemMoi = new javax.swing.JButton();
         jButtonLuu = new javax.swing.JButton();
-        jButtonSua = new javax.swing.JButton();
-        jButtonCapNhat = new javax.swing.JButton();
         jButtonXoa = new javax.swing.JButton();
         jButtonQuayLai = new javax.swing.JButton();
+        jLabelTrangThaiChucNang = new javax.swing.JLabel();
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setPreferredSize(new java.awt.Dimension(988, 531));
@@ -56,6 +131,7 @@ public class QuanLyDanhMuc extends javax.swing.JPanel {
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
+        jTableDanhMuc.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jTableDanhMuc.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {"Admin", "1"},
@@ -80,7 +156,7 @@ public class QuanLyDanhMuc extends javax.swing.JPanel {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 507, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 514, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -88,7 +164,7 @@ public class QuanLyDanhMuc extends javax.swing.JPanel {
         jPanel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel1.setText("QUẢN LÝ NHÓM NGƯỜI DÙNG");
+        jLabel1.setText("QUẢN LÝ DANH MỤC SẢN PHẨM");
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel2.setText("Mã Danh Mục:");
@@ -102,23 +178,17 @@ public class QuanLyDanhMuc extends javax.swing.JPanel {
 
         jButtonThemMoi.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jButtonThemMoi.setText("Thêm Mới");
+        jButtonThemMoi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonThemMoiActionPerformed(evt);
+            }
+        });
 
         jButtonLuu.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jButtonLuu.setText("Lưu");
         jButtonLuu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonLuuActionPerformed(evt);
-            }
-        });
-
-        jButtonSua.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jButtonSua.setText("Sửa");
-
-        jButtonCapNhat.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jButtonCapNhat.setText("Cập Nhật");
-        jButtonCapNhat.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonCapNhatActionPerformed(evt);
             }
         });
 
@@ -143,28 +213,30 @@ public class QuanLyDanhMuc extends javax.swing.JPanel {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextFieldMaDanhMuc)
-                    .addComponent(jTextFieldtenDanhMuc)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jButtonLuu, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButtonThemMoi, javax.swing.GroupLayout.Alignment.LEADING))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addContainerGap()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextFieldMaDanhMuc)
+                            .addComponent(jTextFieldtenDanhMuc)
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jButtonCapNhat, javax.swing.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButtonXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jButtonSua, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(7, 7, 7)
-                        .addComponent(jButtonQuayLai, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jButtonThemMoi, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButtonLuu, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButtonXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(7, 7, 7)
+                                .addComponent(jButtonQuayLai, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel3))
+                                .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3))
+                        .addGap(92, 92, 92)
+                        .addComponent(jLabelTrangThaiChucNang)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -182,19 +254,14 @@ public class QuanLyDanhMuc extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextFieldtenDanhMuc, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jButtonThemMoi, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButtonLuu, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jButtonSua, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButtonCapNhat, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButtonXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButtonQuayLai, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonQuayLai, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonLuu, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonThemMoi, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jLabelTrangThaiChucNang)
+                .addContainerGap(280, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -226,17 +293,52 @@ public class QuanLyDanhMuc extends javax.swing.JPanel {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 542, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 549, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonLuuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLuuActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButtonLuuActionPerformed
+        switch (jLabelTrangThaiChucNang.getText()) {
+            case "Edit":
+            try {
+                if (!jTextFieldtenDanhMuc.getText().equals("")) {
+                    SPController.updateDanhMuc(new DanhMucSanPham(Integer.parseInt(jTextFieldMaDanhMuc.getText()),jTextFieldtenDanhMuc.getText()));
+                    JOptionPane.showMessageDialog(this, "Sửa thành công!", "Sửa danh mục", JOptionPane.DEFAULT_OPTION);
+                    setTableData(SPController.getAllDanhMucSanPham());
+                } else {
+                    JOptionPane.showMessageDialog(this, "TeenDanh Mục không được rỗng", "Sửa Danh Mục", JOptionPane.WARNING_MESSAGE);
+                }
+            } catch (ClassNotFoundException | SQLException ex) {
+                Logger.getLogger(QuanLyNguoiDung.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            System.out.println("Edit");
+            break;
 
-    private void jButtonCapNhatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCapNhatActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButtonCapNhatActionPerformed
+            case "New":
+                if (!jTextFieldtenDanhMuc.getText().equals("") && !jTextFieldMaDanhMuc.getText().equals("")) {
+                    try {
+                        SPController.addDanhMucSanPham(new DanhMucSanPham(jTextFieldtenDanhMuc.getText()));
+                    } catch (ClassNotFoundException | SQLException ex) {
+                        Logger.getLogger(QuanLyDanhMuc.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    JOptionPane.showMessageDialog(this, "Thêm Thành công!", "Thêm mới danh mục", JOptionPane.DEFAULT_OPTION);
+                    try {
+                        setTableData(SPController.getAllDanhMucSanPham());
+                    } catch (ClassNotFoundException | SQLException ex) {
+                        Logger.getLogger(QuanLyDanhMuc.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    jTextFieldtenDanhMuc.setText("");
+                    jTextFieldMaDanhMuc.setText("Tự động");
+                    jLabelTrangThaiChucNang.setText("New");
+                    jTextFieldtenDanhMuc.requestFocus();
+
+                } else {
+                    JOptionPane.showMessageDialog(this, "Chưa điền đủ thông tin", "Thêm mới tài khoản", JOptionPane.WARNING_MESSAGE);
+                }
+                System.out.println("New");
+                break;
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_jButtonLuuActionPerformed
 
     private void jButtonXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonXoaActionPerformed
         // TODO add your handling code here:
@@ -250,22 +352,28 @@ public class QuanLyDanhMuc extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jButtonQuayLaiActionPerformed
 
+    private void jButtonThemMoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonThemMoiActionPerformed
+        jTextFieldtenDanhMuc.setText("");
+        jTextFieldMaDanhMuc.setText("Tự động");
+        jLabelTrangThaiChucNang.setText("New");
+        jTextFieldtenDanhMuc.requestFocus();
+    }//GEN-LAST:event_jButtonThemMoiActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonCapNhat;
     private javax.swing.JButton jButtonLuu;
     private javax.swing.JButton jButtonQuayLai;
-    private javax.swing.JButton jButtonSua;
     private javax.swing.JButton jButtonThemMoi;
     private javax.swing.JButton jButtonXoa;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabelTrangThaiChucNang;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTableDanhMuc;
+    private static javax.swing.JTable jTableDanhMuc;
     private javax.swing.JTextField jTextFieldMaDanhMuc;
     private javax.swing.JTextField jTextFieldtenDanhMuc;
     // End of variables declaration//GEN-END:variables
