@@ -39,6 +39,46 @@ public class SanPhamModel {
         return DanhMucSanPhams;
     }
 
+    public DanhMucSanPham getDanhMucBySanPham(SanPham SP) throws ClassNotFoundException, SQLException {
+        Connection connection = getJDBCConnection();
+        String Sql = "SELECT * FROM DanhMucSanPham WHERE MaDanhMuc = ?;";
+        PreparedStatement preparedStatement = connection.prepareStatement(Sql);
+        preparedStatement.setInt(1, SP.getMaDanhMuc());
+        ResultSet rs = preparedStatement.executeQuery();
+        rs.first();
+        DanhMucSanPham DMSP = new DanhMucSanPham();
+        DMSP.setMaDanhMuc(rs.getInt("MaDanhMuc"));
+        DMSP.setTenDanhMuc(rs.getString("TenDanhMuc"));
+        return DMSP;
+    }
+
+    public List<SanPham> getAllSanPham() throws ClassNotFoundException, SQLException {
+        List<SanPham> SanPhams = new ArrayList<SanPham>();
+        Connection connection = getJDBCConnection();
+        String Sql = "SELECT * "
+                + "FROM SanPham "
+                + "INNER JOIN DanhMucSanPham ON DanhMucSanPham.MaDanhMuc = SanPham.MaDM "
+                + "ORDER BY SanPham.MaDM;";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(Sql);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                SanPham SP = new SanPham();
+                SP.setMaSanPham(rs.getInt("MaSanPham"));
+                SP.setMaDanhMuc(rs.getInt("MaDanhMuc"));
+                SP.setTenDanhMuc(rs.getString("TenDanhMuc"));
+                SP.setTenSanPham(rs.getString("TenSanPham"));
+                SP.setSoLuong(rs.getInt("SoLuong"));
+                SP.setGiaMua(rs.getInt("GiaMua"));
+                SP.setGiaBan(rs.getInt("GiaBan"));
+                SP.setMoTa(rs.getString("MoTa"));
+                SanPhams.add(SP);
+            }
+        } catch (SQLException e) {
+        }
+        return SanPhams;
+    }
+
     public DanhMucSanPham LayThongTinDanhMuc(DanhMucSanPham DanhMucSP) throws ClassNotFoundException, SQLException {
         Connection connection = getJDBCConnection();
         String Sql = "SELECT * FROM DanhMucSanPham WHERE MaDanhMuc = ?;";
@@ -51,6 +91,32 @@ public class SanPhamModel {
             DMSP.setMaDanhMuc(rs.getInt("MaDanhMuc"));
             DMSP.setTenDanhMuc(rs.getString("TenDanhMuc"));
             return DMSP;
+        } catch (SQLException e) {
+        }
+        return null;
+    }
+
+    public SanPham LayThongTinSanPham(SanPham sanpham) throws ClassNotFoundException, SQLException {
+        Connection connection = getJDBCConnection();
+        String Sql = "SELECT * "
+                + "FROM SanPham "
+                + "INNER JOIN DanhMucSanPham ON DanhMucSanPham.MaDanhMuc = SanPham.MaDM "
+                + "WHERE SanPham.MaSanPham = ?;";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(Sql);
+            preparedStatement.setInt(1, sanpham.getMaSanPham());
+            ResultSet rs = preparedStatement.executeQuery();
+            rs.first();
+            SanPham SP = new SanPham();
+            SP.setMaSanPham(rs.getInt("MaSanPham"));
+            SP.setMaDanhMuc(rs.getInt("MaDanhMuc"));
+            SP.setTenDanhMuc(rs.getString("TenDanhMuc"));
+            SP.setTenSanPham(rs.getString("TenSanPham"));
+            SP.setSoLuong(rs.getInt("SoLuong"));
+            SP.setGiaMua(rs.getInt("GiaMua"));
+            SP.setGiaBan(rs.getInt("GiaBan"));
+            SP.setMoTa(rs.getString("MoTa"));
+            return SP;
         } catch (SQLException e) {
         }
         return null;
@@ -81,6 +147,23 @@ public class SanPhamModel {
         }
     }
 
+    public void addSanPham(SanPham SP) throws ClassNotFoundException, SQLException {
+        Connection connection = getJDBCConnection();
+        String Sql = "INSERT INTO `sanpham`(`MaDM`, `TenSanPham`, `SoLuong`, `GiaMua`, `GiaBan`, `MoTa`) VALUES (?,?,?,?,?,?);";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(Sql);
+            //ResultSet rs = preparedStatement.executeQuery();
+            preparedStatement.setInt(1, SP.getMaDanhMuc());
+            preparedStatement.setString(2, SP.getTenSanPham());
+            preparedStatement.setInt(3, SP.getSoLuong());
+            preparedStatement.setInt(4, SP.getGiaMua());
+            preparedStatement.setInt(5, SP.getGiaBan());
+            preparedStatement.setString(6, SP.getMoTa());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+        }
+    }
+
     public void updateDanhMuc(DanhMucSanPham DMSP) throws ClassNotFoundException, SQLException {
         Connection connection = getJDBCConnection();
         String Sql = "UPDATE DanhMucSanPham SET TenDanhMuc = ? WHERE MaDanhMuc = ?;";
@@ -88,6 +171,22 @@ public class SanPhamModel {
             PreparedStatement preparedStatement = connection.prepareStatement(Sql);
             preparedStatement.setString(1, DMSP.getTenDanhMuc());
             preparedStatement.setInt(2, DMSP.getMaDanhMuc());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+        }
+    }
+
+    public void updateSanPham(SanPham SP) throws ClassNotFoundException, SQLException {
+        Connection connection = getJDBCConnection();
+        String Sql = "UPDATE SanPham SET MaDM = ?, TenSanPham = ?,SoLuong = ?,GiaBan = ?,MoTa = ? WHERE MaSanPham = ?;";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(Sql);
+            preparedStatement.setInt(1, SP.getMaDanhMuc());
+            preparedStatement.setString(2, SP.getTenSanPham());
+            preparedStatement.setInt(3, SP.getSoLuong());
+            preparedStatement.setInt(4, SP.getGiaBan());
+            preparedStatement.setString(5, SP.getMoTa());
+            preparedStatement.setInt(6, SP.getMaSanPham());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
         }

@@ -15,6 +15,7 @@ import javax.swing.JList;
  */
 public class MyObjectListCellRenderer extends DefaultListCellRenderer {
 
+    @Override
     public Component getListCellRendererComponent(
             JList list,
             Object value,
@@ -23,6 +24,9 @@ public class MyObjectListCellRenderer extends DefaultListCellRenderer {
             boolean cellHasFocus) {
         if (value instanceof NhomNguoiDung) {
             value = ((NhomNguoiDung) value).getTenNhomNguoiDung();
+        }
+        if (value instanceof DanhMucSanPham) {
+            value = ((DanhMucSanPham) value).getTenDanhMuc();
         }
         super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
         return this;

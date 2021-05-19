@@ -30,6 +30,11 @@ public class DanhMucSanPham {
         this.TenDanhMuc = TenDanhMuc;
     }
 
+    public DanhMucSanPham(DanhMucSanPham DMSP) {
+        this.MaDanhMuc = DMSP.getMaDanhMuc();
+        this.TenDanhMuc = DMSP.getTenDanhMuc();
+    }
+
     public int getMaDanhMuc() {
         return MaDanhMuc;
     }

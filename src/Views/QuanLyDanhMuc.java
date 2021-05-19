@@ -306,7 +306,7 @@ public class QuanLyDanhMuc extends javax.swing.JPanel {
                     JOptionPane.showMessageDialog(this, "Sửa thành công!", "Sửa danh mục", JOptionPane.DEFAULT_OPTION);
                     setTableData(SPController.getAllDanhMucSanPham());
                 } else {
-                    JOptionPane.showMessageDialog(this, "TeenDanh Mục không được rỗng", "Sửa Danh Mục", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Tên Danh Mục không được rỗng", "Sửa Danh Mục", JOptionPane.WARNING_MESSAGE);
                 }
             } catch (ClassNotFoundException | SQLException ex) {
                 Logger.getLogger(QuanLyNguoiDung.class.getName()).log(Level.SEVERE, null, ex);

@@ -9,7 +9,8 @@ package Core;
  *
  * @author Administrator
  */
-public class SanPham extends DanhMucSanPham{
+public class SanPham extends DanhMucSanPham {
+
     int MaSanPham;
     String TenSanPham;
     int SoLuong;
@@ -20,8 +21,31 @@ public class SanPham extends DanhMucSanPham{
     public SanPham() {
     }
 
+    public SanPham(int MaSanPham) {
+        this.MaSanPham = MaSanPham;
+    }
+
     public SanPham(int MaSanPham, String TenSanPham, int SoLuong, int GiaMua, int GiaBan, String MoTa) {
         this.MaSanPham = MaSanPham;
+        this.TenSanPham = TenSanPham;
+        this.SoLuong = SoLuong;
+        this.GiaMua = GiaMua;
+        this.GiaBan = GiaBan;
+        this.MoTa = MoTa;
+    }
+
+    public SanPham(String TenSanPham, int SoLuong, int GiaMua, int GiaBan, String MoTa, int MaDanhMuc) {
+        super.MaDanhMuc = MaDanhMuc;
+        this.TenSanPham = TenSanPham;
+        this.SoLuong = SoLuong;
+        this.GiaMua = GiaMua;
+        this.GiaBan = GiaBan;
+        this.MoTa = MoTa;
+    }
+
+    public SanPham(int MaSanPham, String TenSanPham, int SoLuong, int GiaMua, int GiaBan, String MoTa, int MaDanhMuc) {
+        this.MaSanPham = MaSanPham;
+        super.MaDanhMuc = MaDanhMuc;
         this.TenSanPham = TenSanPham;
         this.SoLuong = SoLuong;
         this.GiaMua = GiaMua;
@@ -106,5 +130,5 @@ public class SanPham extends DanhMucSanPham{
     public void setTenDanhMuc(String TenDanhMuc) {
         this.TenDanhMuc = TenDanhMuc;
     }
-    
+
 }
