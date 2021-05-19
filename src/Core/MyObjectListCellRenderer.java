@@ -28,6 +28,9 @@ public class MyObjectListCellRenderer extends DefaultListCellRenderer {
         if (value instanceof DanhMucSanPham) {
             value = ((DanhMucSanPham) value).getTenDanhMuc();
         }
+        if (value instanceof TrangThaiDonHang) {
+            value = ((TrangThaiDonHang) value).getTenTrangThai();
+        }
         super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
         return this;
     }

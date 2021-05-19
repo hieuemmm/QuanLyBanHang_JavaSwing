@@ -9,13 +9,21 @@ package Core;
  *
  * @author Administrator
  */
-public class DonHang extends TrangThaiDonHang{
+public class DonHang extends TrangThaiDonHang {
+
     int MaDonHang;
     String SDT;
     String DiaChiNhanHang;
     String NgayTao;
 
     public DonHang() {
+    }
+
+    public DonHang(int MaDonHang, String SDT, String DiaChiNhanHang, int MaTT) {
+        this.MaDonHang = MaDonHang;
+        this.SDT = SDT;
+        this.DiaChiNhanHang = DiaChiNhanHang;
+        super.MaTrangThai = MaTT;
     }
 
     public DonHang(int MaDonHang, String SDT, String DiaChiNhanHang, String NgayTao) {
@@ -31,6 +39,10 @@ public class DonHang extends TrangThaiDonHang{
         this.SDT = SDT;
         this.DiaChiNhanHang = DiaChiNhanHang;
         this.NgayTao = NgayTao;
+    }
+
+    public DonHang(int MaDH) {
+        this.MaDonHang = MaDH;
     }
 
     public int getMaDonHang() {

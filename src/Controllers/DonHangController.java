@@ -5,8 +5,14 @@
  */
 package Controllers;
 
+import Core.ChiTietDonHang;
+import Core.DonHang;
+import Core.SanPham;
+import Core.TaiKhoan;
+import Core.TrangThaiDonHang;
 import Models.DonHangModel;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  *
@@ -20,10 +26,40 @@ public class DonHangController {
         DHModel = new DonHangModel();
     }
 
+    public List<TrangThaiDonHang> getAllTrangThaiDonHang() throws ClassNotFoundException, SQLException {
+        return DHModel.getAllTrangThaiDonHang();
+    }
+
+    public List<DonHang> getAllDonHang() throws ClassNotFoundException, SQLException {
+        return DHModel.getAllDonHang();
+    }
+
+    public List<ChiTietDonHang> getAllChiTietDonHangByDonHang(DonHang DH) throws ClassNotFoundException , SQLException
+    {
+        return DHModel.getAllChiTietDonHangByDonHang(DH);
+    }
+
     public int DemTongSoDonHangChuaXuLy() throws ClassNotFoundException, SQLException {
         return DHModel.DemTongSoDonHangChuaXuLy();
     }
-    public int TinhDoanhThu()throws ClassNotFoundException, SQLException {
+
+    public int TinhDoanhThu() throws ClassNotFoundException, SQLException {
         return DHModel.TinhDoanhThu();
+    }
+
+    public DonHang LayThongTinDonHang(DonHang donHang) throws ClassNotFoundException, SQLException {
+        return DHModel.LayThongTinDonHang(donHang);
+    }
+
+    public TrangThaiDonHang getTrangThaiDonHangByDH(DonHang DH) throws ClassNotFoundException, SQLException {
+        return DHModel.getTrangThaiDonHangByDH(DH);
+    }
+
+    public TaiKhoan LayThongTinTaiKhoanCuaDonHang(DonHang DH) throws ClassNotFoundException, SQLException {
+        return DHModel.LayThongTinTaiKhoanCuaDonHang(DH);
+    }
+
+    public void updateDonHang(DonHang DH) throws ClassNotFoundException, SQLException {
+        DHModel.updateDonHang(DH);
     }
 }

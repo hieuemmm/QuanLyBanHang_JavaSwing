@@ -10,10 +10,16 @@ package Core;
  * @author Administrator
  */
 public class TrangThaiDonHang {
+
     int MaTrangThai;
     String TenTrangThai;
 
     public TrangThaiDonHang() {
+    }
+
+    public TrangThaiDonHang(TrangThaiDonHang TTDH) {
+        this.MaTrangThai = TTDH.MaTrangThai;
+        this.TenTrangThai = TTDH.TenTrangThai;
     }
 
     public TrangThaiDonHang(int MaTrangThai, String TenTrangThai) {
@@ -36,5 +42,5 @@ public class TrangThaiDonHang {
     public void setTenTrangThai(String TenTrangThai) {
         this.TenTrangThai = TenTrangThai;
     }
-    
+
 }

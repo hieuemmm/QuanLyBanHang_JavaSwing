@@ -5,9 +5,27 @@
  */
 package Views;
 
+import Controllers.DonHangController;
+import Controllers.SanPhamController;
+import Core.ChiTietDonHang;
+import Core.DanhMucSanPham;
+import Core.DonHang;
+import Core.MyObjectListCellRenderer;
+import Core.SanPham;
+import Core.TrangThaiDonHang;
+import static Views.QuanLySanPham.LayDuLieuChon;
+import java.awt.Dimension;
+import java.awt.Point;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -15,11 +33,121 @@ import java.util.logging.Logger;
  */
 public class QuanLyDonHang extends javax.swing.JPanel {
 
+    private static DonHangController DHController;
+    private final DefaultTableModel defaultTableModel;
+    private final DefaultTableModel defaultTableModel2;
+    private List<TrangThaiDonHang> TTDonHangs;
+
     /**
      * Creates new form QuanLyNhomNguoiDung
      */
-    public QuanLyDonHang() {
+    public QuanLyDonHang() throws ClassNotFoundException, SQLException {
         initComponents();
+        initComponents();
+        DHController = new DonHangController();
+        TTDonHangs = new ArrayList<TrangThaiDonHang>();
+        jTextFieldMaDonHang.setEditable(false);
+        jTextFieldTaiKhoan.setEditable(false);
+        jLabelTrangThaiChucNang.setText("");
+        jLabelTrangThaiChucNang.setVisible(false);
+        jTextFieldTaiKhoan.setText("");
+        jTextFieldSoDienThoai.setText("");
+        jTextFieldDiaChiNhanHang.setText("");
+        jTextFieldSoDienThoai.requestFocus();
+        LoadComboboxDanhMucSP();
+
+        defaultTableModel = new DefaultTableModel() {
+            //không cho phép sửa dữ liệu trên table
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        defaultTableModel2 = new DefaultTableModel() {
+            //không cho phép sửa dữ liệu trên table
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        //thông qua dữ liệu trong defaultTableModel để set data cho table
+        jTableQuanLyDonHang.setModel(defaultTableModel);
+        //set giá trị cột
+        defaultTableModel.addColumn("Mã DH");
+        defaultTableModel.addColumn("SDT");
+        defaultTableModel.addColumn("DiaChi");
+        defaultTableModel.addColumn("Trạng Thái Đơn");
+        jTableQuanLyDonHang.setRowHeight(30);
+        setTableData(DHController.getAllDonHang());
+
+        jTableQuanLyDonHang.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent mouseEvent) {
+                JTable table = (JTable) mouseEvent.getSource();
+                Point point = mouseEvent.getPoint();
+                int row = table.rowAtPoint(point);
+                if (mouseEvent.getClickCount() == 2 && table.getSelectedRow() != -1) {
+                    try {
+                        jLabelTrangThaiChucNang.setText("XemChiTiet");
+                        DonHang DonHangSelect = LayDuLieuChon();
+                        jTextFieldMaDonHang.setText(String.valueOf(DonHangSelect.getMaDonHang()));
+                        jTextFieldSoDienThoai.setText(String.valueOf(DonHangSelect.getSDT()));
+                        jTextFieldDiaChiNhanHang.setText(String.valueOf(DonHangSelect.getDiaChiNhanHang()));
+                        jTextFieldTaiKhoan.setText(DHController.LayThongTinTaiKhoanCuaDonHang(DonHangSelect).getTaiKhoan());
+                        jComboBoxTrangThaiDonHang.getModel().setSelectedItem(DHController.getTrangThaiDonHangByDH(DonHangSelect));
+                        //comboxbox select
+                    } catch (ClassNotFoundException | SQLException ex) {
+                        Logger.getLogger(QuanLyNguoiDung.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        });
+    }
+
+    public static DonHang LayDuLieuChon() throws ClassNotFoundException, SQLException {
+        int row = jTableQuanLyDonHang.getSelectedRow();
+        int MaDH = Integer.parseInt(String.valueOf(jTableQuanLyDonHang.getValueAt(row, 0)));
+        return DHController.LayThongTinDonHang(new DonHang(MaDH));
+    }
+
+    private void setTableData(List<DonHang> DonHangs) throws ClassNotFoundException, SQLException {
+        defaultTableModel.setRowCount(0);
+        DonHangs.forEach(x -> {
+            //set giá trị hàng
+            defaultTableModel.addRow(new Object[]{
+                x.getMaDonHang(),
+                x.getSDT(),
+                x.getDiaChiNhanHang(),
+                x.getTenTrangThai()
+            });
+        });
+    }
+
+    private void setTableData2(List<ChiTietDonHang> ChiTietDonHangs) throws ClassNotFoundException, SQLException {
+        defaultTableModel.setRowCount(0);
+        ChiTietDonHangs.forEach(x -> {
+            //set giá trị hàng
+            defaultTableModel2.addRow(new Object[]{
+                x.getMaSanPham(),
+                x.getTenSanPham(),
+                x.getSoLuongMua(),
+                x.getGiaBan()
+            });
+        });
+    }
+
+    private void LoadComboboxDanhMucSP() throws ClassNotFoundException, SQLException {
+        TTDonHangs = DHController.getAllTrangThaiDonHang();
+        jComboBoxTrangThaiDonHang.removeAllItems();
+        TTDonHangs.forEach(TTDH -> {
+            jComboBoxTrangThaiDonHang.addItem(new TrangThaiDonHang(TTDH));
+        });
+        jComboBoxTrangThaiDonHang.setRenderer(new MyObjectListCellRenderer());
+    }
+
+    private int ReadComboxTTDH() {
+        TrangThaiDonHang TTDH = (TrangThaiDonHang) (jComboBoxTrangThaiDonHang.getSelectedItem());
+        return TTDH.getMaTrangThai();
     }
 
     /**
@@ -41,10 +169,7 @@ public class QuanLyDonHang extends javax.swing.JPanel {
         jTextFieldMaDonHang = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jTextFieldSoDienThoai = new javax.swing.JTextField();
-        jButtonThemMoi = new javax.swing.JButton();
         jButtonLuu = new javax.swing.JButton();
-        jButtonSua = new javax.swing.JButton();
-        jButtonCapNhat = new javax.swing.JButton();
         jButtonXoa = new javax.swing.JButton();
         jButtonQuayLai = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
@@ -53,6 +178,8 @@ public class QuanLyDonHang extends javax.swing.JPanel {
         jTextFieldDiaChiNhanHang = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jComboBoxTrangThaiDonHang = new javax.swing.JComboBox<>();
+        jLabelTrangThaiChucNang = new javax.swing.JLabel();
+        jButtonQuayLaiXemChiTiet = new javax.swing.JButton();
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setPreferredSize(new java.awt.Dimension(988, 531));
@@ -62,6 +189,7 @@ public class QuanLyDonHang extends javax.swing.JPanel {
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
+        jTableQuanLyDonHang.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jTableQuanLyDonHang.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {"Admin", "1"},
@@ -78,9 +206,9 @@ public class QuanLyDonHang extends javax.swing.JPanel {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+            .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 626, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 683, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -106,25 +234,11 @@ public class QuanLyDonHang extends javax.swing.JPanel {
 
         jTextFieldSoDienThoai.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
-        jButtonThemMoi.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jButtonThemMoi.setText("Thêm Mới");
-
         jButtonLuu.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jButtonLuu.setText("Lưu");
         jButtonLuu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonLuuActionPerformed(evt);
-            }
-        });
-
-        jButtonSua.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jButtonSua.setText("Sửa");
-
-        jButtonCapNhat.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jButtonCapNhat.setText("Cập Nhật");
-        jButtonCapNhat.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonCapNhatActionPerformed(evt);
             }
         });
 
@@ -157,7 +271,15 @@ public class QuanLyDonHang extends javax.swing.JPanel {
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel6.setText("Trạng Thái Đơn Hàng:");
 
-        jComboBoxTrangThaiDonHang.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBoxTrangThaiDonHang.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        jButtonQuayLaiXemChiTiet.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jButtonQuayLaiXemChiTiet.setText("Xem Chi Tiết");
+        jButtonQuayLaiXemChiTiet.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonQuayLaiXemChiTietActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -173,34 +295,35 @@ public class QuanLyDonHang extends javax.swing.JPanel {
                             .addComponent(jLabel5)
                             .addComponent(jLabel6))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                    .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jTextFieldMaDonHang, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addComponent(jLabel4)
-                                        .addGap(0, 0, Short.MAX_VALUE))
-                                    .addComponent(jTextFieldTaiKhoan)))
-                            .addComponent(jTextFieldSoDienThoai, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextFieldDiaChiNhanHang, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jComboBoxTrangThaiDonHang, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jTextFieldDiaChiNhanHang, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
+                                .addComponent(jButtonLuu, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButtonXoa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jTextFieldSoDienThoai, javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(jButtonLuu, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jButtonThemMoi, javax.swing.GroupLayout.Alignment.LEADING))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jButtonQuayLai, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
+                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel2)
+                                            .addComponent(jTextFieldMaDonHang, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel4)
+                                            .addComponent(jTextFieldTaiKhoan, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                     .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addComponent(jButtonCapNhat, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jButtonXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jButtonSua, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                        .addGap(146, 146, 146))))
+                                        .addComponent(jButtonQuayLaiXemChiTiet, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGap(10, 10, 10)
+                                        .addComponent(jButtonQuayLai)))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(15, 15, 15))))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(75, 75, 75)
+                .addComponent(jLabelTrangThaiChucNang)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -229,21 +352,17 @@ public class QuanLyDonHang extends javax.swing.JPanel {
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jComboBoxTrangThaiDonHang, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jButtonThemMoi, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButtonLuu, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jButtonSua, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButtonCapNhat, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButtonXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(jButtonLuu, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonQuayLai, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(89, Short.MAX_VALUE))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonQuayLai, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonQuayLaiXemChiTiet, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(35, 35, 35)
+                .addComponent(jLabelTrangThaiChucNang)
+                .addContainerGap(229, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -252,7 +371,7 @@ public class QuanLyDonHang extends javax.swing.JPanel {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -281,45 +400,72 @@ public class QuanLyDonHang extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonLuuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLuuActionPerformed
-        // TODO add your handling code here:
+        if (jLabelTrangThaiChucNang.getText().equals("XemChiTiet")) {
+            try {
+                if (!jTextFieldSoDienThoai.getText().equals("") && !jTextFieldDiaChiNhanHang.getText().equals("")) {
+                    DHController.updateDonHang(new DonHang(Integer.parseInt(jTextFieldMaDonHang.getText()), jTextFieldSoDienThoai.getText(), jTextFieldDiaChiNhanHang.getText(), ReadComboxTTDH()));
+                    JOptionPane.showMessageDialog(this, "Sửa thành công!", "Sửa Sản Phẩm", JOptionPane.DEFAULT_OPTION);
+                    setTableData(DHController.getAllDonHang());
+                } else {
+                    JOptionPane.showMessageDialog(this, "SDT và Địa Chỉ không được rỗng", "Sửa Đơn Hàng", JOptionPane.WARNING_MESSAGE);
+                }
+            } catch (ClassNotFoundException | SQLException ex) {
+                Logger.getLogger(QuanLyNguoiDung.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }//GEN-LAST:event_jButtonLuuActionPerformed
-
-    private void jButtonCapNhatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCapNhatActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButtonCapNhatActionPerformed
 
     private void jButtonXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonXoaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButtonXoaActionPerformed
 
     private void jButtonQuayLaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonQuayLaiActionPerformed
+        jTableQuanLyDonHang.setModel(defaultTableModel);
         try {
-            MasterLayout.it.showDashbroad();        // TODO add your handling code here:
+            setTableData(DHController.getAllDonHang());
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(QuanLyDonHang.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButtonQuayLaiActionPerformed
 
+    private void jButtonQuayLaiXemChiTietActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonQuayLaiXemChiTietActionPerformed
+        if (jLabelTrangThaiChucNang.getText().equals("XemChiTiet")) {
+            jTableQuanLyDonHang.setModel(defaultTableModel2);
+            //set giá trị cột
+            defaultTableModel2.addColumn("Mã Sản Phẩm");
+            defaultTableModel2.addColumn("Tên Sản Phẩm");
+            defaultTableModel2.addColumn("Số Lượng");
+            defaultTableModel2.addColumn("Giá Bán");
+            jTableQuanLyDonHang.setRowHeight(30);
+            try {
+                setTableData2(DHController.getAllChiTietDonHangByDonHang(new DonHang(Integer.parseInt(jTextFieldMaDonHang.getText()))));
+            } catch (ClassNotFoundException | SQLException ex) {
+                Logger.getLogger(QuanLyDonHang.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Phải chọn đơn hàng trước", "Xem chi tiết đơn hàng", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_jButtonQuayLaiXemChiTietActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonCapNhat;
     private javax.swing.JButton jButtonLuu;
     private javax.swing.JButton jButtonQuayLai;
-    private javax.swing.JButton jButtonSua;
-    private javax.swing.JButton jButtonThemMoi;
+    private javax.swing.JButton jButtonQuayLaiXemChiTiet;
     private javax.swing.JButton jButtonXoa;
-    private javax.swing.JComboBox<String> jComboBoxTrangThaiDonHang;
+    private javax.swing.JComboBox<TrangThaiDonHang> jComboBoxTrangThaiDonHang;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabelTrangThaiChucNang;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTableQuanLyDonHang;
+    private static javax.swing.JTable jTableQuanLyDonHang;
     private javax.swing.JTextField jTextFieldDiaChiNhanHang;
     private javax.swing.JTextField jTextFieldMaDonHang;
     private javax.swing.JTextField jTextFieldSoDienThoai;

@@ -236,20 +236,31 @@ public final class MasterLayout extends javax.swing.JFrame {
 
             case "Quản Lý Sản Phẩm":
                 panelControl.removeAll();
-                QuanLySanPham QLSP = new QuanLySanPham();
-                QLSP.setSize(980, 531);
-                QLSP.setPreferredSize(new Dimension(980, 531));
-                panelControl.add(QLSP);
-                panelControl.updateUI();
+                QuanLySanPham QLSP;
+                try {
+                    QLSP = new QuanLySanPham();
+                    QLSP.setSize(980, 531);
+                    QLSP.setPreferredSize(new Dimension(980, 531));
+                    panelControl.add(QLSP);
+                    panelControl.updateUI();
+                } catch (ClassNotFoundException | SQLException ex) {
+                    Logger.getLogger(MasterLayout.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 break;
             case "Quản Lý Đơn Hàng":
                 panelControl.removeAll();
-                QuanLyDonHang QLDH = new QuanLyDonHang();
-                QLDH.setSize(980, 531);
-                QLDH.setPreferredSize(new Dimension(980, 531));
-                panelControl.add(QLDH);
-                panelControl.updateUI();
+                QuanLyDonHang QLDH;
+                try {
+                    QLDH = new QuanLyDonHang();
+                    QLDH.setSize(980, 531);
+                    QLDH.setPreferredSize(new Dimension(980, 531));
+                    panelControl.add(QLDH);
+                    panelControl.updateUI();
+                } catch (ClassNotFoundException | SQLException ex) {
+                    Logger.getLogger(MasterLayout.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 break;
+
             case "Thống Kê Sản Phẩm":
                 panelControl.removeAll();
                 ThongKeSanPham TKSP = new ThongKeSanPham();
