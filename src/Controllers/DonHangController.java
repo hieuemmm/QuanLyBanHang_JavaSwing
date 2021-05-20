@@ -30,12 +30,15 @@ public class DonHangController {
         return DHModel.getAllTrangThaiDonHang();
     }
 
-    public List<DonHang> getAllDonHang() throws ClassNotFoundException, SQLException {
-        return DHModel.getAllDonHang();
+    public List<DonHang> getAllDonHang(int MaTT) throws ClassNotFoundException, SQLException {
+        return DHModel.getAllDonHang(MaTT);
     }
 
-    public List<ChiTietDonHang> getAllChiTietDonHangByDonHang(DonHang DH) throws ClassNotFoundException , SQLException
-    {
+    public List<DonHang> getAllDonHangByTaiKhoan(String TK) throws ClassNotFoundException, SQLException {
+        return DHModel.getAllDonHangByTaiKhoan(TK);
+    }
+
+    public List<ChiTietDonHang> getAllChiTietDonHangByDonHang(DonHang DH) throws ClassNotFoundException, SQLException {
         return DHModel.getAllChiTietDonHangByDonHang(DH);
     }
 

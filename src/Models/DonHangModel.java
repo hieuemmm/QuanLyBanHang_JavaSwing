@@ -87,14 +87,53 @@ public class DonHangModel {
         return null;
     }
 
-    public List<DonHang> getAllDonHang() throws ClassNotFoundException, SQLException {
+    public List<DonHang> getAllDonHang(int MaTT) throws ClassNotFoundException, SQLException {
         List<DonHang> DonHangs = new ArrayList<DonHang>();
         Connection connection = getJDBCConnection();
-        String Sql = "SELECT * FROM DonHang "
-                + "INNER JOIN TrangThaiDonHang ON TrangThaiDonHang.MaTrangThai = DonHang.MaTT "
-                + "ORDER BY DonHang.MaTT;";
+        String Sql;
+        if (MaTT != 0) {
+            Sql = "SELECT * FROM DonHang "
+                    + "INNER JOIN TrangThaiDonHang ON TrangThaiDonHang.MaTrangThai = DonHang.MaTT "
+                    + "WHERE DonHang.MaTT = ? ;";
+        } else {
+            Sql = "SELECT * FROM DonHang "
+                    + "INNER JOIN TrangThaiDonHang ON TrangThaiDonHang.MaTrangThai = DonHang.MaTT "
+                    + "ORDER BY DonHang.MaTT ;";
+        }
         try {
+
             PreparedStatement preparedStatement = connection.prepareStatement(Sql);
+            if (MaTT != 0) {
+                preparedStatement.setInt(1, MaTT);
+            }
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                DonHang DH = new DonHang();
+                DH.setMaDonHang(rs.getInt("MaDonHang"));
+                DH.setMaTrangThai(rs.getInt("MaTT"));
+                DH.setTenTrangThai(rs.getString("TenTrangThai"));
+                DH.setSDT(rs.getString("SDT"));
+                DH.setDiaChiNhanHang(rs.getString("DiaChiNhanHang"));
+                DH.setNgayTao(rs.getString("NgayTao"));
+                DonHangs.add(DH);
+            }
+        } catch (SQLException e) {
+        }
+        return DonHangs;
+    }
+
+    public List<DonHang> getAllDonHangByTaiKhoan(String TK) throws ClassNotFoundException, SQLException {
+        List<DonHang> DonHangs = new ArrayList<DonHang>();
+        Connection connection = getJDBCConnection();
+        String Sql;
+        Sql = "SELECT * FROM DonHang "
+                + "INNER JOIN TrangThaiDonHang ON TrangThaiDonHang.MaTrangThai = DonHang.MaTT "
+                + "WHERE DonHang.TK = ? ;";
+
+        try {
+
+            PreparedStatement preparedStatement = connection.prepareStatement(Sql);
+                preparedStatement.setString(1, TK);
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
                 DonHang DH = new DonHang();
