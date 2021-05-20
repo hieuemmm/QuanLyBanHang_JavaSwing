@@ -39,6 +39,13 @@ public class ThongKe extends javax.swing.JPanel {
         jLabel8.setCursor(new Cursor(Cursor.HAND_CURSOR));
         jLabel11.setCursor(new Cursor(Cursor.HAND_CURSOR));
         jLabel13.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        if (DangNhap.taikhoandangnhap.getMaNhomNguoiDung() != 1) {
+            jLabel7.setVisible(false);
+            jLabel8.setVisible(true);
+            jLabel11.setVisible(false);
+            jLabel13.setVisible(false);
+            
+        }
         Locale usa = new Locale("vi", "VN");
         Currency dollars = Currency.getInstance(usa);
         NumberFormat dollarFormat = NumberFormat.getCurrencyInstance(usa);
@@ -289,7 +296,7 @@ public class ThongKe extends javax.swing.JPanel {
     }//GEN-LAST:event_jLabel13MouseClicked
 
     private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
-       MasterLayout.it.ShowQuanLyNguoiDung();
+        MasterLayout.it.ShowQuanLyNguoiDung();
     }//GEN-LAST:event_jLabel11MouseClicked
 
 

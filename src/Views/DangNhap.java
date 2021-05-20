@@ -24,6 +24,7 @@ public class DangNhap extends javax.swing.JFrame {
 
     private TaiKhoanController dangnhapController;
     public static TaiKhoan taikhoandangnhap;
+    public static TaiKhoan TKNhapVao;
 
     public DangNhap() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
         //this.setBackground(Color.WHITE);
@@ -32,6 +33,7 @@ public class DangNhap extends javax.swing.JFrame {
         centerFrame();
         dangnhapController = new TaiKhoanController();
         taikhoandangnhap = new TaiKhoan();
+        TKNhapVao = new TaiKhoan();
         jLabelLoiDangNhap.setVisible(false);
         jCheckBoxRemeberme.setSelected(true);
         jButtonDangNhap.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -194,18 +196,18 @@ public class DangNhap extends javax.swing.JFrame {
 
     private void jButtonDangNhapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDangNhapActionPerformed
         if (!jTextFieldTaiKhoan.getText().equals("") && !String.valueOf(jPasswordFieldMatKhau.getPassword()).equals("")) {
-            taikhoandangnhap.setTaiKhoan(jTextFieldTaiKhoan.getText().trim());
-            taikhoandangnhap.setMatKhau(String.valueOf(jPasswordFieldMatKhau.getPassword()).trim());
+            TKNhapVao.setTaiKhoan(jTextFieldTaiKhoan.getText().trim());
+            TKNhapVao.setMatKhau(String.valueOf(jPasswordFieldMatKhau.getPassword()).trim());
             try {
-                if (dangnhapController.CheckDangNhap(taikhoandangnhap)) {
+                if (dangnhapController.CheckDangNhap(TKNhapVao)) {
                     try {
+                        taikhoandangnhap = dangnhapController.LayThongTinDangNhap(new TaiKhoan(TKNhapVao.getTaiKhoan()));
                         new MasterLayout().setVisible(true);
                     } catch (ClassNotFoundException | SQLException | UnsupportedLookAndFeelException | InstantiationException | IllegalAccessException ex) {
                         Logger.getLogger(DangNhap.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    taikhoandangnhap = dangnhapController.LayThongTinDangNhap(taikhoandangnhap);
                     this.dispose();
-                }else{
+                } else {
                     jLabelLoiDangNhap.setVisible(true);
                 }
             } catch (ClassNotFoundException | SQLException ex) {

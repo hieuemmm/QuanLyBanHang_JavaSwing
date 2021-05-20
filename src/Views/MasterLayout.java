@@ -5,6 +5,7 @@
  */
 package Views;
 
+import static Views.DangNhap.taikhoandangnhap;
 import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
 import java.awt.Point;
@@ -71,8 +72,16 @@ public final class MasterLayout extends javax.swing.JFrame {
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         it = this;
         initComponents();
+        LoadJtreeMenu();
         centerFrame();
         showDashbroad();
+        String PhanQuyen;
+        if (DangNhap.taikhoandangnhap.getMaNhomNguoiDung() == 1) {
+            PhanQuyen = "Adminstrator";
+        }else{
+            PhanQuyen = "Nhân Viên";
+        }
+        jMenu1.setText("@Me : " +DangNhap.taikhoandangnhap.getTen()+ " [ " + PhanQuyen + " ]");
     }
 
     private void centerFrame() {
@@ -173,6 +182,11 @@ public final class MasterLayout extends javax.swing.JFrame {
 
         jMenuItem3.setText("Đăng Xuất");
         jMenuItem3.setToolTipText("");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
         jMenu1.add(jMenuItem3);
 
         jMenuBar1.add(jMenu1);
@@ -200,7 +214,23 @@ public final class MasterLayout extends javax.swing.JFrame {
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem2ActionPerformed
-
+    public void LoadJtreeMenu() {
+        DefaultMutableTreeNode RootNode = new DefaultMutableTreeNode("QUẢN LÝ BÁN HÀNG ");
+        DefaultMutableTreeNode ChildNode = new DefaultMutableTreeNode("Thống Kê");
+        RootNode.add(ChildNode);
+        if (DangNhap.taikhoandangnhap.getMaNhomNguoiDung() == 1) {
+            DefaultMutableTreeNode ChildNode1 = new DefaultMutableTreeNode("Quản Lý Người Dùng");
+            RootNode.add(ChildNode1);
+            DefaultMutableTreeNode ChildNode2 = new DefaultMutableTreeNode("Quản Lý Danh Mục");
+            RootNode.add(ChildNode2);
+            DefaultMutableTreeNode ChildNode3 = new DefaultMutableTreeNode("Quản Lý Sản Phẩm");
+            RootNode.add(ChildNode3);
+        }
+        DefaultMutableTreeNode ChildNode4 = new DefaultMutableTreeNode("Quản Lý Đơn Hàng");
+        RootNode.add(ChildNode4);
+        DefaultTreeModel defaultTreeModel = new DefaultTreeModel(RootNode);
+        jTreeMenu.setModel(defaultTreeModel);
+    }
     private void jTreeMenuValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_jTreeMenuValueChanged
         DefaultMutableTreeNode selectNode = (DefaultMutableTreeNode) jTreeMenu.getLastSelectedPathComponent();
         switch (selectNode.getUserObject().toString()) {
@@ -217,7 +247,8 @@ public final class MasterLayout extends javax.swing.JFrame {
                     panelControl.add(QLDM);
                     panelControl.updateUI();
                 } catch (ClassNotFoundException | SQLException ex) {
-                    Logger.getLogger(MasterLayout.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(MasterLayout.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
                 break;
             case "Quản Lý Sản Phẩm":
@@ -237,7 +268,8 @@ public final class MasterLayout extends javax.swing.JFrame {
                     panelControl.add(TKSP);
                     panelControl.updateUI();
                 } catch (ClassNotFoundException | SQLException ex) {
-                    Logger.getLogger(MasterLayout.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(MasterLayout.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
                 break;
 
@@ -251,10 +283,20 @@ public final class MasterLayout extends javax.swing.JFrame {
                     panelControl.add(DB);
                     panelControl.updateUI();
                 } catch (ClassNotFoundException | SQLException ex) {
-                    Logger.getLogger(MasterLayout.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(MasterLayout.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
         }
     }//GEN-LAST:event_jTreeMenuValueChanged
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        try {
+            new DangNhap().setVisible(true);
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+            Logger.getLogger(MasterLayout.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.dispose();
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
     public void showDashbroad() throws ClassNotFoundException, SQLException {
         panelControl.removeAll();
         ThongKe DB = new ThongKe();
@@ -274,7 +316,8 @@ public final class MasterLayout extends javax.swing.JFrame {
             panelControl.add(QLDH);
             panelControl.updateUI();
         } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(MasterLayout.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MasterLayout.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -288,7 +331,8 @@ public final class MasterLayout extends javax.swing.JFrame {
             panelControl.add(QLSP);
             panelControl.updateUI();
         } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(MasterLayout.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MasterLayout.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -302,7 +346,8 @@ public final class MasterLayout extends javax.swing.JFrame {
             panelControl.add(QLND);
             panelControl.updateUI();
         } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(MasterLayout.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MasterLayout.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables

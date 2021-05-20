@@ -16,6 +16,13 @@ public class TaiKhoan extends NhomNguoiDung{
 
     public TaiKhoan() {
     }
+    public TaiKhoan(TaiKhoan TK) {
+        this.TaiKhoan = TK.getTaiKhoan();
+        this.MatKhau = TK.getMatKhau();
+        this.Ten = TK.getTen();
+        super.MaNhomNguoiDung = TK.getMaNhomNguoiDung();
+        super.TenNhomNguoiDung = TK.getTenNhomNguoiDung();
+    }
     public TaiKhoan(String TaiKhoan) {
         this.TaiKhoan = TaiKhoan;
     }
