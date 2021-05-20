@@ -40,6 +40,7 @@ public class QuanLyDonHang extends javax.swing.JPanel {
 
     /**
      * Creates new form QuanLyNhomNguoiDung
+     * @param LocMaTT
      */
     public QuanLyDonHang() throws ClassNotFoundException, SQLException {
         initComponents();
@@ -56,6 +57,7 @@ public class QuanLyDonHang extends javax.swing.JPanel {
         jTextFieldSoDienThoai.requestFocus();
         LoadComboboxTTDH();
         LoadComboboxLocTrangThaiDonHang();
+        jComboBoxLocTrangThaiDonHnag.getModel().setSelectedItem(new TrangThaiDonHang(1,"Chưa Duyệt"));
         defaultTableModel = new DefaultTableModel() {
             //không cho phép sửa dữ liệu trên table
             @Override

@@ -135,7 +135,6 @@ public class QuanLyNguoiDung extends javax.swing.JPanel {
         jTextFieldHoten = new javax.swing.JTextField();
         jButtonThemMoi = new javax.swing.JButton();
         jButtonLuu = new javax.swing.JButton();
-        jButtonQuayLai = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jComboBoxNhomNguoiDung = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
@@ -182,14 +181,6 @@ public class QuanLyNguoiDung extends javax.swing.JPanel {
             }
         });
 
-        jButtonQuayLai.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jButtonQuayLai.setText("Quay Lại");
-        jButtonQuayLai.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonQuayLaiActionPerformed(evt);
-            }
-        });
-
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel4.setText("Nhóm Người Dùng :");
 
@@ -227,8 +218,7 @@ public class QuanLyNguoiDung extends javax.swing.JPanel {
                         .addComponent(jButtonThemMoi, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButtonLuu, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonQuayLai, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(135, 135, 135)))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -254,12 +244,11 @@ public class QuanLyNguoiDung extends javax.swing.JPanel {
                 .addComponent(jComboBoxNhomNguoiDung, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonQuayLai, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonLuu, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonThemMoi, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(70, 70, 70)
                 .addComponent(jLabelTrangThaiChucNang)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(73, Short.MAX_VALUE))
         );
 
         jButtonThemMoi.getAccessibleContext().setAccessibleDescription(""); // NOI18N
@@ -375,15 +364,6 @@ public class QuanLyNguoiDung extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jButtonLuuActionPerformed
 
-    private void jButtonQuayLaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonQuayLaiActionPerformed
-        try {
-            MasterLayout.it.showDashbroad();        // TODO add your handling code here:
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(QuanLyNguoiDung.class
-                    .getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_jButtonQuayLaiActionPerformed
-
     private void jButtonThemMoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonThemMoiActionPerformed
         jTextFieldTaiKhoan.setText("");
         jTextFieldHoten.setText("");
@@ -396,7 +376,6 @@ public class QuanLyNguoiDung extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonLuu;
-    private javax.swing.JButton jButtonQuayLai;
     private javax.swing.JButton jButtonThemMoi;
     private javax.swing.JComboBox<NhomNguoiDung> jComboBoxNhomNguoiDung;
     private javax.swing.JLabel jLabel1;

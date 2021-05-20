@@ -120,7 +120,6 @@ public class QuanLyDanhMuc extends javax.swing.JPanel {
         jButtonThemMoi = new javax.swing.JButton();
         jButtonLuu = new javax.swing.JButton();
         jButtonXoa = new javax.swing.JButton();
-        jButtonQuayLai = new javax.swing.JButton();
         jLabelTrangThaiChucNang = new javax.swing.JLabel();
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -200,14 +199,6 @@ public class QuanLyDanhMuc extends javax.swing.JPanel {
             }
         });
 
-        jButtonQuayLai.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jButtonQuayLai.setText("Quay Lại");
-        jButtonQuayLai.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonQuayLaiActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -226,8 +217,7 @@ public class QuanLyDanhMuc extends javax.swing.JPanel {
                                 .addComponent(jButtonLuu, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jButtonXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(7, 7, 7)
-                                .addComponent(jButtonQuayLai, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(136, 136, 136))
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel1)
@@ -256,7 +246,6 @@ public class QuanLyDanhMuc extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonQuayLai, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonLuu, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonThemMoi, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
@@ -344,14 +333,6 @@ public class QuanLyDanhMuc extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButtonXoaActionPerformed
 
-    private void jButtonQuayLaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonQuayLaiActionPerformed
-        try {
-            MasterLayout.it.showDashbroad();
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(QuanLyDanhMuc.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_jButtonQuayLaiActionPerformed
-
     private void jButtonThemMoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonThemMoiActionPerformed
         jTextFieldtenDanhMuc.setText("");
         jTextFieldMaDanhMuc.setText("Tự động");
@@ -362,7 +343,6 @@ public class QuanLyDanhMuc extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonLuu;
-    private javax.swing.JButton jButtonQuayLai;
     private javax.swing.JButton jButtonThemMoi;
     private javax.swing.JButton jButtonXoa;
     private javax.swing.JLabel jLabel1;

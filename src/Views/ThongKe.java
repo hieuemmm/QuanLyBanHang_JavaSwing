@@ -8,30 +8,45 @@ package Views;
 import Controllers.DonHangController;
 import Controllers.SanPhamController;
 import Controllers.ThongKeController;
+import java.awt.Cursor;
 import java.sql.SQLException;
+import java.text.NumberFormat;
+import java.util.Currency;
+import java.util.Locale;
 
 /**
  *
  * @author Administrator
  */
-public class Dashbroad extends javax.swing.JPanel {
+public class ThongKe extends javax.swing.JPanel {
+
     private final ThongKeController TKcontroller;
     private final SanPhamController SPcontroller;
     private final DonHangController DHcontroller;
+
     /**
      * Creates new form QuanLyNhomNguoiDung
+     *
      * @throws java.lang.ClassNotFoundException
      * @throws java.sql.SQLException
      */
-    public Dashbroad() throws ClassNotFoundException, SQLException {
+    public ThongKe() throws ClassNotFoundException, SQLException {
         initComponents();
         TKcontroller = new ThongKeController();
         SPcontroller = new SanPhamController();
         DHcontroller = new DonHangController();
-        jLabelKhachHangDaDangKy.setText(String.valueOf(TKcontroller.DemTongTaiKhoan(3))+ " Khách Hàng đã đăng ký");
-        jLabelSanPham.setText(String.valueOf(SPcontroller.DemTongSoSanPham())+ " Sản Phẩm trong kho");
-        jLabelDonHangChuaXuLy.setText(String.valueOf(DHcontroller.DemTongSoDonHangChuaXuLy())+ " Đơn hàng chưa xử lý");
-        jLabelDoanhThu.setText(String.valueOf(DHcontroller.TinhDoanhThu())+ "000 VND trong tháng này");
+        jLabel7.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        jLabel8.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        jLabel11.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        jLabel13.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        Locale usa = new Locale("vi", "VN");
+        Currency dollars = Currency.getInstance(usa);
+        NumberFormat dollarFormat = NumberFormat.getCurrencyInstance(usa);
+        //(2500).toLocaleString('en-US', {style: 'currency',currency: 'VND',});
+        jLabelKhachHangDaDangKy.setText(String.valueOf(TKcontroller.DemTongTaiKhoan(3)) + " Khách Hàng đã đăng ký");
+        jLabelSanPham.setText(String.valueOf(SPcontroller.DemTongSoSanPham()) + " Sản Phẩm trong kho");
+        jLabelDonHangChuaXuLy.setText(String.valueOf(DHcontroller.DemTongSoDonHangChuaXuLy()) + " Đơn hàng chưa xử lý");
+        jLabelDoanhThu.setText(String.valueOf(dollarFormat.format(DHcontroller.TinhDoanhThu())) + " trong tháng này");
     }
 
     /**
@@ -115,6 +130,11 @@ public class Dashbroad extends javax.swing.JPanel {
         jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(64, 153, 255));
         jLabel8.setText("Xem Chi Tiết");
+        jLabel8.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel8MouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -143,6 +163,11 @@ public class Dashbroad extends javax.swing.JPanel {
         jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(46, 216, 128));
         jLabel11.setText("Xem Chi Tiết");
+        jLabel11.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel11MouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -171,6 +196,11 @@ public class Dashbroad extends javax.swing.JPanel {
         jLabel13.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel13.setForeground(new java.awt.Color(255, 182, 77));
         jLabel13.setText("Xem Chi Tiết");
+        jLabel13.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel13MouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -249,6 +279,18 @@ public class Dashbroad extends javax.swing.JPanel {
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jLabel8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseClicked
+        MasterLayout.it.ShowQuanLyDonHang();
+    }//GEN-LAST:event_jLabel8MouseClicked
+
+    private void jLabel13MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel13MouseClicked
+        MasterLayout.it.ShowQuanLySanPham();
+    }//GEN-LAST:event_jLabel13MouseClicked
+
+    private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
+       MasterLayout.it.ShowQuanLyNguoiDung();
+    }//GEN-LAST:event_jLabel11MouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

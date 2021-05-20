@@ -203,7 +203,7 @@ public class DonHangModel {
 
     public int TinhDoanhThu() throws ClassNotFoundException, SQLException {
         Connection connection = getJDBCConnection();
-        String Sql = "SELECT SUM(chitietdonhang.SoLuongMua * sanpham.DonGia) AS DoanhThu "
+        String Sql = "SELECT SUM(chitietdonhang.SoLuongMua * sanpham.GiaBan)*1000 AS DoanhThu "
                 + "FROM donhang "
                 + "INNER JOIN chitietdonhang ON donhang.MaDonHang = chitietdonhang.MaDH "
                 + "INNER JOIN sanpham ON chitietdonhang.MaSP = sanpham.MaSanPham "

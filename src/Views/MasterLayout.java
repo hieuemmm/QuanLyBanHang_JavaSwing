@@ -114,7 +114,7 @@ public final class MasterLayout extends javax.swing.JFrame {
 
         jTreeMenu.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("QUẢN LÝ BÁN HÀNG");
-        javax.swing.tree.DefaultMutableTreeNode treeNode2 = new javax.swing.tree.DefaultMutableTreeNode("Dashbroad");
+        javax.swing.tree.DefaultMutableTreeNode treeNode2 = new javax.swing.tree.DefaultMutableTreeNode("Thống Kê");
         treeNode1.add(treeNode2);
         treeNode2 = new javax.swing.tree.DefaultMutableTreeNode("Quản Lý Người Dùng");
         treeNode1.add(treeNode2);
@@ -123,8 +123,6 @@ public final class MasterLayout extends javax.swing.JFrame {
         treeNode2 = new javax.swing.tree.DefaultMutableTreeNode("Quản Lý Sản Phẩm");
         treeNode1.add(treeNode2);
         treeNode2 = new javax.swing.tree.DefaultMutableTreeNode("Quản Lý Đơn Hàng");
-        treeNode1.add(treeNode2);
-        treeNode2 = new javax.swing.tree.DefaultMutableTreeNode("Thống Kê Sản Phẩm");
         treeNode1.add(treeNode2);
         jTreeMenu.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
         jTreeMenu.setRowHeight(26);
@@ -207,17 +205,7 @@ public final class MasterLayout extends javax.swing.JFrame {
         DefaultMutableTreeNode selectNode = (DefaultMutableTreeNode) jTreeMenu.getLastSelectedPathComponent();
         switch (selectNode.getUserObject().toString()) {
             case "Quản Lý Người Dùng":
-                panelControl.removeAll();
-                QuanLyNguoiDung QLND = null;
-                try {
-                    QLND = new QuanLyNguoiDung();
-                    QLND.setSize(980, 531);
-                    QLND.setPreferredSize(new Dimension(980, 531));
-                    panelControl.add(QLND);
-                    panelControl.updateUI();
-                } catch (ClassNotFoundException | SQLException ex) {
-                    Logger.getLogger(MasterLayout.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                ShowQuanLyNguoiDung();
                 break;
             case "Quản Lý Danh Mục":
                 panelControl.removeAll();
@@ -231,66 +219,91 @@ public final class MasterLayout extends javax.swing.JFrame {
                 } catch (ClassNotFoundException | SQLException ex) {
                     Logger.getLogger(MasterLayout.class.getName()).log(Level.SEVERE, null, ex);
                 }
-
                 break;
-
             case "Quản Lý Sản Phẩm":
-                panelControl.removeAll();
-                QuanLySanPham QLSP;
-                try {
-                    QLSP = new QuanLySanPham();
-                    QLSP.setSize(980, 531);
-                    QLSP.setPreferredSize(new Dimension(980, 531));
-                    panelControl.add(QLSP);
-                    panelControl.updateUI();
-                } catch (ClassNotFoundException | SQLException ex) {
-                    Logger.getLogger(MasterLayout.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                ShowQuanLySanPham();
                 break;
             case "Quản Lý Đơn Hàng":
+                ShowQuanLyDonHang();
+                break;
+
+            case "Thống Kê":
                 panelControl.removeAll();
-                QuanLyDonHang QLDH;
+                ThongKe TKSP;
                 try {
-                    QLDH = new QuanLyDonHang();
-                    QLDH.setSize(980, 531);
-                    QLDH.setPreferredSize(new Dimension(980, 531));
-                    panelControl.add(QLDH);
+                    TKSP = new ThongKe();
+                    TKSP.setSize(980, 531);
+                    TKSP.setPreferredSize(new Dimension(980, 531));
+                    panelControl.add(TKSP);
                     panelControl.updateUI();
                 } catch (ClassNotFoundException | SQLException ex) {
                     Logger.getLogger(MasterLayout.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 break;
 
-            case "Thống Kê Sản Phẩm":
-                panelControl.removeAll();
-                ThongKeSanPham TKSP = new ThongKeSanPham();
-                TKSP.setSize(980, 531);
-                TKSP.setPreferredSize(new Dimension(980, 531));
-                panelControl.add(TKSP);
-                panelControl.updateUI();
-                break;
             default:
                 panelControl.removeAll();
-                Dashbroad DB = null;
+                ThongKe DB = null;
                 try {
-                    DB = new Dashbroad();
+                    DB = new ThongKe();
+                    DB.setSize(980, 531);
+                    DB.setPreferredSize(new Dimension(980, 531));
+                    panelControl.add(DB);
+                    panelControl.updateUI();
                 } catch (ClassNotFoundException | SQLException ex) {
                     Logger.getLogger(MasterLayout.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                DB.setSize(980, 531);
-                DB.setPreferredSize(new Dimension(980, 531));
-                panelControl.add(DB);
-                panelControl.updateUI();
-
         }
     }//GEN-LAST:event_jTreeMenuValueChanged
     public void showDashbroad() throws ClassNotFoundException, SQLException {
         panelControl.removeAll();
-        Dashbroad DB = new Dashbroad();
+        ThongKe DB = new ThongKe();
         DB.setSize(980, 531);
         DB.setPreferredSize(new Dimension(980, 531));
         panelControl.add(DB);
         panelControl.updateUI();
+    }
+
+    public void ShowQuanLyDonHang() {
+        panelControl.removeAll();
+        QuanLyDonHang QLDH;
+        try {
+            QLDH = new QuanLyDonHang();
+            QLDH.setSize(980, 531);
+            QLDH.setPreferredSize(new Dimension(980, 531));
+            panelControl.add(QLDH);
+            panelControl.updateUI();
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(MasterLayout.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void ShowQuanLySanPham() {
+        panelControl.removeAll();
+        QuanLySanPham QLSP;
+        try {
+            QLSP = new QuanLySanPham();
+            QLSP.setSize(980, 531);
+            QLSP.setPreferredSize(new Dimension(980, 531));
+            panelControl.add(QLSP);
+            panelControl.updateUI();
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(MasterLayout.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void ShowQuanLyNguoiDung() {
+        panelControl.removeAll();
+        QuanLyNguoiDung QLND = null;
+        try {
+            QLND = new QuanLyNguoiDung();
+            QLND.setSize(980, 531);
+            QLND.setPreferredSize(new Dimension(980, 531));
+            panelControl.add(QLND);
+            panelControl.updateUI();
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(MasterLayout.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu jMenu1;
