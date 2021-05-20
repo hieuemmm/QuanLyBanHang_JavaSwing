@@ -22,14 +22,25 @@ import java.util.List;
  */
 public class TaiKhoanModel {
 
-    public List<TaiKhoan> getAllTaiKhoan() throws ClassNotFoundException, SQLException {
+    public List<TaiKhoan> getAllTaiKhoan(int MaNND) throws ClassNotFoundException, SQLException {
         List<TaiKhoan> TaiKhoans = new ArrayList<TaiKhoan>();
         Connection connection = getJDBCConnection();
-        String Sql = "SELECT * "
-                + "FROM TaiKhoan "
-                + "INNER JOIN NhomNguoiDung ON TaiKhoan.MaNhomND = NhomNguoiDung.MaNhomNguoiDung";
+        String Sql;
+        if (MaNND == 0) {
+            Sql = "SELECT * "
+                    + "FROM TaiKhoan "
+                    + "INNER JOIN NhomNguoiDung ON TaiKhoan.MaNhomND = NhomNguoiDung.MaNhomNguoiDung ;";
+        } else {
+            Sql = "SELECT * "
+                    + "FROM TaiKhoan "
+                    + "INNER JOIN NhomNguoiDung ON TaiKhoan.MaNhomND = NhomNguoiDung.MaNhomNguoiDung "
+                    + "WHERE TaiKhoan.MaNhomND = ? ;";
+        }
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(Sql);
+            if (MaNND != 0) {
+                preparedStatement.setInt(1, MaNND);
+            }
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
                 TaiKhoan taikhoan = new TaiKhoan();
@@ -168,6 +179,18 @@ public class TaiKhoanModel {
             preparedStatement.setString(2, taikhoan.getTen());
             preparedStatement.setInt(3, taikhoan.getMaNhomNguoiDung());
             preparedStatement.setString(4, taikhoan.getTaiKhoan());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+        }
+    }
+
+    public static void DoiMatKhau(TaiKhoan taikhoan) throws ClassNotFoundException, SQLException {
+        Connection connection = getJDBCConnection();
+        String Sql = "UPDATE TaiKhoan SET MatKhau = ? WHERE TaiKhoan = ?;";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(Sql);
+            preparedStatement.setString(1, taikhoan.getMatKhau());
+            preparedStatement.setString(2, taikhoan.getTaiKhoan());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
         }

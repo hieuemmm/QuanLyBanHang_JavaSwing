@@ -291,7 +291,7 @@ public class QuanLyDanhMuc extends javax.swing.JPanel {
             case "Edit":
             try {
                 if (!jTextFieldtenDanhMuc.getText().equals("")) {
-                    SPController.updateDanhMuc(new DanhMucSanPham(Integer.parseInt(jTextFieldMaDanhMuc.getText()),jTextFieldtenDanhMuc.getText()));
+                    SPController.updateDanhMuc(new DanhMucSanPham(Integer.parseInt(jTextFieldMaDanhMuc.getText()), jTextFieldtenDanhMuc.getText()));
                     JOptionPane.showMessageDialog(this, "Sửa thành công!", "Sửa danh mục", JOptionPane.DEFAULT_OPTION);
                     setTableData(SPController.getAllDanhMucSanPham());
                 } else {
@@ -330,7 +330,24 @@ public class QuanLyDanhMuc extends javax.swing.JPanel {
     }//GEN-LAST:event_jButtonLuuActionPerformed
 
     private void jButtonXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonXoaActionPerformed
-        // TODO add your handling code here:
+        if (jLabelTrangThaiChucNang.getText().equals("Edit")) {
+            if (JOptionPane.showConfirmDialog(this, "Bạn có muốn xóa danh mục không?", "Xóa Danh Mục", JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION) {
+                try {
+                    SPController.DeleteDanhMuc(Integer.parseInt(jTextFieldMaDanhMuc.getText()));
+                    setTableData(SPController.getAllDanhMucSanPham());
+
+                    jTextFieldtenDanhMuc.setText("");
+                    jTextFieldMaDanhMuc.setText("Tự động");
+                    jLabelTrangThaiChucNang.setText("New");
+                    jTextFieldtenDanhMuc.requestFocus();
+                    JOptionPane.showMessageDialog(this, "Xóa Thành công", "Xóa Danh Mục", JOptionPane.WARNING_MESSAGE);
+                } catch (ClassNotFoundException | SQLException ex) {
+                    Logger.getLogger(QuanLyDanhMuc.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Phải chọn danh mục trước", "Xóa Danh Mục", JOptionPane.WARNING_MESSAGE);
+        }
     }//GEN-LAST:event_jButtonXoaActionPerformed
 
     private void jButtonThemMoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonThemMoiActionPerformed

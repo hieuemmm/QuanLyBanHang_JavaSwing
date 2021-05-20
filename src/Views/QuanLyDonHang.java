@@ -19,8 +19,11 @@ import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -57,6 +60,9 @@ public class QuanLyDonHang extends javax.swing.JPanel {
         jTextFieldSoDienThoai.requestFocus();
         LoadComboboxTTDH();
         LoadComboboxLocTrangThaiDonHang();
+        Locale usa = new Locale("vi", "VN");
+        Currency dollars = Currency.getInstance(usa);
+        NumberFormat dollarFormat = NumberFormat.getCurrencyInstance(usa);
         jComboBoxLocTrangThaiDonHnag.getModel().setSelectedItem(new TrangThaiDonHang(1,"Chưa Duyệt"));
         defaultTableModel = new DefaultTableModel() {
             //không cho phép sửa dữ liệu trên table
@@ -92,6 +98,7 @@ public class QuanLyDonHang extends javax.swing.JPanel {
                     try {
                         jLabelTrangThaiChucNang.setText("XemChiTiet");
                         DonHang DonHangSelect = LayDuLieuChon();
+                        jLabelThanhTien.setText(String.valueOf(dollarFormat.format(DHController.TongGiaTriDonHang(DonHangSelect.getMaDonHang())*1000)));
                         jTextFieldMaDonHang.setText(String.valueOf(DonHangSelect.getMaDonHang()));
                         jTextFieldSoDienThoai.setText(String.valueOf(DonHangSelect.getSDT()));
                         jTextFieldDiaChiNhanHang.setText(String.valueOf(DonHangSelect.getDiaChiNhanHang()));
@@ -198,6 +205,8 @@ public class QuanLyDonHang extends javax.swing.JPanel {
         jButtonLoc = new javax.swing.JButton();
         jTextFieldTimKiem = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        jLabelThanhTien = new javax.swing.JLabel();
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setPreferredSize(new java.awt.Dimension(988, 531));
@@ -311,6 +320,11 @@ public class QuanLyDonHang extends javax.swing.JPanel {
             }
         });
 
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel7.setText("Thành Tiền: ");
+
+        jLabelThanhTien.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -357,7 +371,11 @@ public class QuanLyDonHang extends javax.swing.JPanel {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jButtonQuayLai, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jButtonQuayLaiXemChiTiet, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                    .addComponent(jButtonQuayLaiXemChiTiet, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabelThanhTien, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addContainerGap())))
         );
         jPanel3Layout.setVerticalGroup(
@@ -395,7 +413,11 @@ public class QuanLyDonHang extends javax.swing.JPanel {
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jComboBoxTrangThaiDonHang, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(jLabelThanhTien))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonLuu, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonQuayLaiXemChiTiet, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -523,6 +545,8 @@ public class QuanLyDonHang extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabelThanhTien;
     private javax.swing.JLabel jLabelTrangThaiChucNang;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

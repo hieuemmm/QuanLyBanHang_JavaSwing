@@ -176,6 +176,28 @@ public class SanPhamModel {
         }
     }
 
+    public void DeleteDanhMuc(int MaDanhMuc) throws ClassNotFoundException, SQLException {
+        Connection connection = getJDBCConnection();
+        String Sql = "DELETE FROM danhmucsanpham WHERE MaDanhMuc = ? ;";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(Sql);
+            preparedStatement.setInt(1, MaDanhMuc);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+        }
+    }
+
+    public void DeleteSanPham(int MaSanPham) throws ClassNotFoundException, SQLException {
+        Connection connection = getJDBCConnection();
+        String Sql = "DELETE FROM sanpham WHERE MaSanPham = ? ;";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(Sql);
+            preparedStatement.setInt(1, MaSanPham);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+        }
+    }
+
     public void updateSanPham(SanPham SP) throws ClassNotFoundException, SQLException {
         Connection connection = getJDBCConnection();
         String Sql = "UPDATE SanPham SET MaDM = ?, TenSanPham = ?,SoLuong = ?,GiaBan = ?,MoTa = ? WHERE MaSanPham = ?;";

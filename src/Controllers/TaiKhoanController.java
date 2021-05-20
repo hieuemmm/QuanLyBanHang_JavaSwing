@@ -13,6 +13,7 @@ import com.mysql.jdbc.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,8 +28,19 @@ public class TaiKhoanController {
         taikhoanModel = new TaiKhoanModel();
     }
 
-    public List<TaiKhoan> getAllTaiKhoan() throws ClassNotFoundException, SQLException {
-        return taikhoanModel.getAllTaiKhoan();
+    public List<TaiKhoan> getAllTaiKhoan(int MaNND) throws ClassNotFoundException, SQLException {
+        return taikhoanModel.getAllTaiKhoan(MaNND);
+    }
+
+    public List<TaiKhoan> TimKiemTaiKhoan(String word) throws ClassNotFoundException, SQLException {
+        List<TaiKhoan> TaiKhoans = taikhoanModel.getAllTaiKhoan(0);
+        List<TaiKhoan> TaiKhoanTimThay = new ArrayList<>();
+        for (TaiKhoan Tk : TaiKhoans) {
+            if (Tk.getTaiKhoan().toLowerCase().equals(word.toLowerCase()) || Tk.getTen().toLowerCase().equals(word.toLowerCase())) {
+                TaiKhoanTimThay.add(Tk);
+            }
+        }
+        return TaiKhoanTimThay;
     }
 
     public List<NhomNguoiDung> getAllNhomNguoiDung() throws ClassNotFoundException, SQLException {
@@ -57,5 +69,8 @@ public class TaiKhoanController {
 
     public void updateTaiKhoan(TaiKhoan TK) throws ClassNotFoundException, SQLException {
         taikhoanModel.updateTaiKhoan(TK);
+    }
+    public void DoiMatKhau(TaiKhoan TK) throws ClassNotFoundException, SQLException {
+        TaiKhoanModel.DoiMatKhau(TK);
     }
 }

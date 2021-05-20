@@ -133,7 +133,7 @@ public class DonHangModel {
         try {
 
             PreparedStatement preparedStatement = connection.prepareStatement(Sql);
-                preparedStatement.setString(1, TK);
+            preparedStatement.setString(1, TK);
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
                 DonHang DH = new DonHang();
@@ -213,6 +213,23 @@ public class DonHangModel {
             ResultSet rs = preparedStatement.executeQuery();
             rs.first();
             return rs.getInt("DoanhThu");
+        } catch (SQLException e) {
+        }
+        return 0;
+    }
+
+    public int TongGiaTriDonHang(int MaDH) throws ClassNotFoundException, SQLException {
+        Connection connection = getJDBCConnection();
+        String Sql = "SELECT SUM(sanpham.GiaBan*chitietdonhang.SoLuongMua) AS ThanhTien "
+                + "FROM chitietdonhang "
+                + "INNER JOIN sanpham ON sanpham.MaSanPham = chitietdonhang.MaSP "
+                + "WHERE MaDH = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(Sql);
+            preparedStatement.setInt(1, MaDH);
+            ResultSet rs = preparedStatement.executeQuery();
+            rs.first();
+            return rs.getInt("ThanhTien");
         } catch (SQLException e) {
         }
         return 0;

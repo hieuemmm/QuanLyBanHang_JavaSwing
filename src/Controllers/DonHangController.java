@@ -50,6 +50,10 @@ public class DonHangController {
         return DHModel.TinhDoanhThu();
     }
 
+    public int TongGiaTriDonHang(int MaDH) throws ClassNotFoundException, SQLException {
+        return DHModel.TongGiaTriDonHang(MaDH);
+    }
+
     public DonHang LayThongTinDonHang(DonHang donHang) throws ClassNotFoundException, SQLException {
         return DHModel.LayThongTinDonHang(donHang);
     }

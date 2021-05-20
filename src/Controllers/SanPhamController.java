@@ -30,9 +30,11 @@ public class SanPhamController {
     public List<DanhMucSanPham> getAllDanhMucSanPham() throws ClassNotFoundException, SQLException {
         return SPModel.getAllDanhMucSanPham();
     }
+
     public DanhMucSanPham getDanhMucBySanPham(SanPham SP) throws ClassNotFoundException, SQLException {
         return SPModel.getDanhMucBySanPham(SP);
     }
+
     public DanhMucSanPham LayThongTinDanhMuc(DanhMucSanPham DMSP) throws ClassNotFoundException, SQLException {
         return SPModel.LayThongTinDanhMuc(DMSP);
     }
@@ -49,6 +51,14 @@ public class SanPhamController {
         SPModel.updateDanhMuc(DMSP);
     }
 
+    public void DeleteDanhMuc(int MaDanhMuc) throws ClassNotFoundException, SQLException {
+        SPModel.DeleteDanhMuc(MaDanhMuc);
+    }
+
+    public void DeleteSanPham(int MSP) throws ClassNotFoundException, SQLException {
+        SPModel.DeleteSanPham(MSP);
+    }
+
     public void updateSanPham(SanPham SP) throws ClassNotFoundException, SQLException {
         SPModel.updateSanPham(SP);
     }
@@ -56,6 +66,7 @@ public class SanPhamController {
     public void addDanhMucSanPham(DanhMucSanPham DMSP) throws ClassNotFoundException, SQLException {
         SPModel.addDanhMucSanPham(DMSP);
     }
+
     public void addSanPham(SanPham SP) throws ClassNotFoundException, SQLException {
         SPModel.addSanPham(SP);
     }
